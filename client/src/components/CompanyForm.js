@@ -6,6 +6,7 @@ import { submitCompanyData, submitFinancialData } from '../services/api';
 function CompanyForm() {
   const [formData, setFormData] = useState({});
   const [currentDropdown, setCurrentDropdown] = useState(''); // 'company', 'financial' or ''
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,6 +20,9 @@ function CompanyForm() {
     e.preventDefault();
     try {
       const response = await submitCompanyData(formData);
+      setFormData({});
+      setCurrentDropdown('');
+      setSuccessMessage('Company Data Submitted Successfully!');
       console.log('Server Response:', response.data);
     } catch (error) {
       console.error('Error sending data:', error);
@@ -27,8 +31,15 @@ function CompanyForm() {
 
   const handleFinancialSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name) {
+      alert('Company name is mandatory for financial data');
+      return;
+    }
     try {
       const response = await submitFinancialData(formData);
+      setFormData({});
+      setCurrentDropdown('');
+      setSuccessMessage('Financial Data Submitted Successfully!');
       console.log('Server Response:', response.data);
     } catch (error) {
       console.error('Error sending data:', error);
@@ -37,6 +48,8 @@ function CompanyForm() {
 
   return (
     <div className="form-container">
+      {successMessage && <div className="success-message">{successMessage}</div>}
+
       <div class="center-container">
         <button className="button dropdownButton"
           onClick={() => setCurrentDropdown(currentDropdown === 'company' ? '' : 'company')}>
@@ -49,6 +62,7 @@ function CompanyForm() {
         currentDropdown === 'company' && (
           <form onSubmit={handleCompanySubmit}>
             <section className="section">
+
               <h2>Company Data</h2>
               <label className="form-label" htmlFor="name">Name:</label>
               <input className="form-input" type="text" name="name" value={formData.name} onChange={handleChange} id="name" placeholder="Name" />
@@ -76,9 +90,11 @@ function CompanyForm() {
       {
         currentDropdown === 'financial' && (
           <form onSubmit={handleFinancialSubmit}>
-
             <section className="section">
+
               <h2>Financial Data</h2>
+              <label className="form-label" htmlFor="name">Name:</label>
+              <input className="form-input" type="text" name="name" value={formData.name} onChange={handleChange} id="name" placeholder="Name" />
 
               <label className="form-label" htmlFor="revenue">Revenue (annualized):</label>
               <input className="form-input" type="text" name="revenue" value={formData.revenue} onChange={handleChange} id="revenue" placeholder="Revenue (annualized)" />

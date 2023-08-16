@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Company, FinancialData } = require('./models');
+const cors = require('cors');
+
 
 const app = express();
 const PORT = 3000;
-
+app.use(cors());
 app.use(bodyParser.json());
 
 app.listen(PORT, () => {
@@ -34,13 +36,16 @@ app.post('/company', async (req, res) => {
 app.post('/financial-data', async (req, res) => {
     try {
         // Get the company's ID based on its name
-        const company = await Company.findOne({ where: { name: req.body.name } });
+        let company = await Company.findOne({ where: { name: req.body.name } });
 
         if (!company) {
-            return res.status(400).json({ error: 'Company not found' });
+            const companyData = {
+                name: req.body.name,
+            };
+            company = await Company.create(companyData);
         }
         const financialDataFields = {
-            companyId: companyId,  // using the queried company ID
+            companyId: company.id,  // using the queried company ID
             revenue: req.body.revenue,
             cashBurn: req.body.cashBurn,
             grossProfitPercentage: req.body.grossProfitPercentage,

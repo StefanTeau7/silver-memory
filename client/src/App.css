@@ -166,3 +166,12 @@ input[type="file"] {
   flex-direction: row; 
   gap: 20px; 
 }
+
+.success-message {
+  background-color: #28a745; /* Green background for success */
+  color: #ffffff; /* White text color */
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+  text-align: center;
+}

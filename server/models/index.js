@@ -8,21 +8,6 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
-const Company = require('./models/companies');
-const CompanyDataEntry = require('./models/company_data_entries');
-const User = require('./models/users');
-const MetricType = require('./models/metric_types');
-const MetricRaw = require('./models/metrics_raw');
-const SourceType = require('./models/source_types');
-
-Company.hasMany(CompanyDataEntry, { foreignKey: 'companies_id' });
-User.hasMany(CompanyDataEntry, { foreignKey: 'users_id' });
-CompanyDataEntry.belongsTo(Company, { foreignKey: 'companies_id' });
-CompanyDataEntry.belongsTo(User, { foreignKey: 'users_id' });
-CompanyDataEntry.belongsTo(SourceType, { foreignKey: 'source_types_id' });
-CompanyDataEntry.hasMany(MetricRaw, { foreignKey: 'company_data_entries_id' });
-MetricType.hasMany(MetricRaw, { foreignKey: 'metric_types_id' });
-
 
 let sequelize;
 if (config.use_env_variable) {
