@@ -142,7 +142,7 @@ input[type="file"] {
   cursor: pointer;
   background-color: var(--primary-color);
   color: var(--text-color);
-  border: none;
+  border: 1px solid var(--primary-color);
   border-radius: 5px;
   transition: background-color 0.3s;
 }
