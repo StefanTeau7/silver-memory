@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { Company, FinancialData } = require('./models');
 const cors = require('cors');
-
+const { sequelize } = require('./models/index');  // Adjust the path according to your project structure.
 
 const app = express();
 const PORT = 3001;
@@ -12,6 +12,14 @@ app.use(bodyParser.json());
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('Connection to the database has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 // Add a new company
 app.post('/company', async (req, res) => {
