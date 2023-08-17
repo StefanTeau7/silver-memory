@@ -1,12 +1,13 @@
 import 'font-awesome/css/font-awesome.min.css';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import '../App.css';
 import { submitCompanyData, submitFinancialData } from '../services/api';
 
 function CompanyForm() {
   const [formData, setFormData] = useState({});
   const [currentDropdown, setCurrentDropdown] = useState(''); // 'company', 'financial' or ''
-  const [successMessage, setSuccessMessage] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,10 +20,13 @@ function CompanyForm() {
   const handleCompanySubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!validate()) {
+        return;
+      }
       const response = await submitCompanyData(formData);
       setFormData({});
       setCurrentDropdown('');
-      setSuccessMessage('Company Data Submitted Successfully!');
+      showSuccessMessage('Company Data Submitted Successfully!')
       console.log('Server Response:', response.data);
     } catch (error) {
       console.error('Error sending data:', error);
@@ -31,6 +35,9 @@ function CompanyForm() {
 
   const handleFinancialSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) {
+      return;
+    }
     if (!formData.name) {
       alert('Company name is mandatory for financial data');
       return;
@@ -39,17 +46,51 @@ function CompanyForm() {
       const response = await submitFinancialData(formData);
       setFormData({});
       setCurrentDropdown('');
-      setSuccessMessage('Financial Data Submitted Successfully!');
+      showSuccessMessage('Financial Data Submitted Successfully!')
       console.log('Server Response:', response.data);
     } catch (error) {
       console.error('Error sending data:', error);
     }
   };
 
+  const showSuccessMessage = (text) => {
+    toast.success(text, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+
+  }
+
+  const validate = () => {
+    let errors = {};
+
+    if (!formData.name) {
+      errors.name = "Name is required!";
+    }
+
+    if (currentDropdown === 'financial') {
+      if (formData.revenue && isNaN(formData.revenue)) {
+        errors.revenue = "Please enter a valid number!";
+      }
+      if (formData.cashBurn && isNaN(formData.cashBurn)) {
+        errors.cashBurn = "Please enter a valid number!";
+      }
+      // TODO: Add more validations here
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+
   return (
     <div className="form-container">
-      {successMessage && <div className="success-message">{successMessage}</div>}
-
       <div class="center-container">
         <button className="button dropdownButton"
           onClick={() => setCurrentDropdown(currentDropdown === 'company' ? '' : 'company')}>
@@ -66,6 +107,7 @@ function CompanyForm() {
               <h2>Company Data</h2>
               <label className="form-label" htmlFor="name">Name:</label>
               <input className="form-input" type="text" name="name" value={formData.name} onChange={handleChange} id="name" placeholder="Name" />
+              {formErrors.name && <span className="error">{formErrors.name}</span>}
 
               <label className="form-label" htmlFor="industry">Industry(s):</label>
               <input className="form-input" type="text" name="industry" value={formData.industry} onChange={handleChange} id="industry" placeholder="Industry(s)" />
@@ -95,12 +137,15 @@ function CompanyForm() {
               <h2>Financial Data</h2>
               <label className="form-label" htmlFor="name">Name:</label>
               <input className="form-input" type="text" name="name" value={formData.name} onChange={handleChange} id="name" placeholder="Name" />
+              {formErrors.name && <span className="error">{formErrors.name}</span>}
 
               <label className="form-label" htmlFor="revenue">Revenue (annualized):</label>
               <input className="form-input" type="text" name="revenue" value={formData.revenue} onChange={handleChange} id="revenue" placeholder="Revenue (annualized)" />
+              {formErrors.revenue && <span className="error">{formErrors.revenue}</span>}
 
               <label className="form-label" htmlFor="cashBurn">Cash Burn (annualized):</label>
               <input className="form-input" type="text" name="cashBurn" value={formData.cashBurn} onChange={handleChange} id="cashBurn" placeholder="Cash Burn (annualized)" />
+              {formErrors.cashBurn && <span className="error">{formErrors.cashBurn}</span>}
 
               <label className="form-label" htmlFor="grossProfitPercentage">Gross Profit (%):</label>
               <input className="form-input" type="text" name="grossProfitPercentage" value={formData.grossProfitPercentage} onChange={handleChange} id="grossProfitPercentage" placeholder="Gross Profit (%)" />

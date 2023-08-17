@@ -2,6 +2,7 @@
 :root {
   --primary-color: #0077B6;      /* Deep Blue */
   --secondary-color: #03045E;    /* Dark Navy */
+  --secondary-color-darkened: #000054;
   --tertiary-color: #00B4D8;     /* Sky Blue */
   --font-color: #CAF0F8;         /* Soft Blue Tint */
   --text-color: white;         /* Rich Blue */
@@ -61,7 +62,7 @@ h1 {
 }
 
 .dropzone:hover {
-  background-color:  var(--tertiary-color);
+  background-color:  var(--secondary-color-darkened);
 }
 
 .dropzone-container {
@@ -174,4 +175,9 @@ input[type="file"] {
   margin: 10px 0;
   border-radius: 4px;
   text-align: center;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
 }
