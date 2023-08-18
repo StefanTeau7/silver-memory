@@ -16,45 +16,58 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Clone the repo:
 
+```
 git clone https://github.com/stefanteau7/silvermemory.git
-
+```
 
 2. Navigate to the project directory:
 
+```
 cd projectname
-
+```
 
 ### Setting up the Backend
 
 1. Navigate to the server directory:
 
+```
 cd server
+```
 
 2. Install the required packages:
 
+```
 npm install
+```
 
 3. Setup your PostgreSQL database
 
 4. Run the backend server:
 
+```
 npm start
-
+```
 
 ### Setting up the Client (React)
 
 1. Navigate to the client directory:
  
+ ```
 cd .. (if previously in server folder)
 cd client
+```
 
 2. Install the required packages:
 
+```
 npm install
+```
 
 3. Start the React app:
 
+```
 npm start
+```
 
 Your app should now open in your default browser. If not, navigate to `http://localhost:3000` in your browser.
 
