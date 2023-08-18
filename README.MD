@@ -42,6 +42,18 @@ npm install
 
 3. Setup your PostgreSQL database
 
+```
+psql -U postgres
+```
+
+```
+CREATE ROLE postgres WITH LOGIN PASSWORD 'test';
+```
+
+```
+ALTER ROLE dev WITH SUPERUSER;
+```
+
 4. Run the backend server:
 
 ```
@@ -52,8 +64,10 @@ npm start
 
 1. Navigate to the client directory:
  
- ```
+```
 cd .. (if previously in server folder)
+```
+```
 cd client
 ```
 
